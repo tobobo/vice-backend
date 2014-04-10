@@ -2,11 +2,6 @@ mongoose = require 'mongoose'
 passportLocalMongoose = require 'passport-local-mongoose'
 modelMethods = require '../utils/model_methods'
 
-mongoose.Schema.prototype.serialize = (meta) ->
-  JSON.stringify
-    user: @serializeToObj()
-    meta: meta
-
 userSchema = new mongoose.Schema
   email:
     type: String
@@ -21,6 +16,10 @@ userSchema.plugin passportLocalMongoose,
 userSchema.plugin modelMethods,
   singular: 'user'
   plural: 'users'
+
+userSchema.methods.serializeToObj = ->
+  id: @id
+  email: @email
 
 User = mongoose.model 'User', userSchema
 
