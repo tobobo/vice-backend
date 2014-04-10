@@ -11,13 +11,13 @@ module.exports = (schema, options) ->
     result =
       meta: meta
     result["#{options.singular}"] = @serializeToObj()
-    result
+    JSON.stringify result
 
   schema.statics.serialize = (models, meta) ->
     result = 
       meta: meta
     result["#{options.plural}"] = models.map (model) -> model.serializeToObj()
-    result
+    JSON.stringify result
 
   schema.methods.deserialize = (params) ->
     schema.methods.serializeToObj.call params
