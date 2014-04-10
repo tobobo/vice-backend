@@ -1,7 +1,7 @@
 module.exports = (schema, options) ->
   schema.methods.serializeToObj = (meta) ->
     result = {}
-    for k, v of @schema.paths
+    for k, v of schema.paths
       if k.substr(0,2) != '__'
         key = if k == '_id' then 'id' else k
         result[key] = @[key]
@@ -19,11 +19,11 @@ module.exports = (schema, options) ->
     result["#{options.plural}"] = models.map (model) -> model.serializeToObj()
     JSON.stringify result
 
-  schema.methods.deserialize = (params) ->
+  schema.statics.deserialize = (params) ->
     schema.methods.serializeToObj.call params
 
-  schema.methods.params = (params) ->
-    result = schema.methods.deserialize params
+  schema.statics.params = (params) ->
+    result = schema.statics.deserialize params
     for k, v of result
       unless v?
         delete result[k]
