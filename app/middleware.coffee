@@ -2,27 +2,27 @@ express = require 'express'
 passport = require 'passport'
 MongoStore = require('connect-mongo') express
 
-module.exports = (config, app, db) ->
+module.exports = (app) ->
   app.use express.static('public')
   app.use express.bodyParser()
   app.use express.methodOverride()
-  app.use express.cookieParser(config.session.cookie_secret)
+  app.use express.cookieParser(app.config.session.cookie_secret)
 
-  connection = db.connections[0]
   app.use express.session
-    secret: config.session.secret
+    secret: app.config.session.secret
     store: new MongoStore
       collection: 'sessions'
-      url: config.db.url
+      url: app.config.db.url
     , (db) ->
       console.log 'mongo store connected'
     cookie:
       maxAge: 60*60*1000
-      domain: config.session.cookie_domain
+      domain: app.config.session.cookie_domain
 
   app.use (req, res, next) ->
     originValid = false
-    for host in [/localhost:.*/]
+    for host in app.config.clients
+      if typeof host == 'string' then host = new RegExp(host)
       if host.test req.headers.origin
         originValid = true
         break
