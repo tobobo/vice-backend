@@ -14,6 +14,7 @@
     "connect-mongo": "^0.4.0",
     "passport": "^0.2.0",
     "passport-local-mongoose": "^0.3.0",
-    "rsvp": "~3.0.6"
+    "rsvp": "~3.0.6",
+    "coffee-script": "~1.7.1"
   }
 }
