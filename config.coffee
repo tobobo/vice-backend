@@ -4,7 +4,7 @@ module.exports =
     /localhost:.*/
   ]
   db:
-    url: 'mongodb://localhost/sample-db'
+    url: process.env.VICE_DATABASE_URL or 'mongodb://localhost/vice-backend'
   session:
     secret: 'illlklklklk'
     cookie_secret: 'slfklksdjf'

@@ -1,3 +1,5 @@
+RSVP = require 'rsvp'
+
 module.exports = (schema, options) ->
   schema.methods.serializeToObj = (meta) ->
     result = {}
@@ -16,6 +18,7 @@ module.exports = (schema, options) ->
   schema.statics.serialize = (models, meta) ->
     result = 
       meta: meta
+
     result["#{options.plural}"] = models.map (model) -> model.serializeToObj()
     JSON.stringify result
 
@@ -28,3 +31,11 @@ module.exports = (schema, options) ->
       unless v?
         delete result[k]
     result
+
+  schema.methods.saveP = ->
+    new RSVP.Promise (resolve, reject) =>
+      @save (error, model) ->
+        if error?
+          reject error
+        else
+          resolve model
